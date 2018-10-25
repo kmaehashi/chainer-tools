@@ -3,6 +3,8 @@
 Usage:
 
 ```sh
+$ pip install distlib
+
 $ ./check_cupy.sh 6.0.0a1
 cupy:
 cupy-6.0.0a1.tar.gz
