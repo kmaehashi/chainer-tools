@@ -10,7 +10,7 @@ from github import Github
 
 
 def check_tbp_issue(issue, repo, bp_issues, interactive, verbose):
-    # Check all closed issues labeled with "to-be-backported"
+    # Check each closed issues labeled with "to-be-backported"
 
     if verbose:
         print(issue)

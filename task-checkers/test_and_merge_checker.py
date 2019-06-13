@@ -10,7 +10,7 @@ from github import Github
 
 
 def check_tam_issue(issue, repo, grace_days, interactive, verbose):
-    # Check all open ssues labeled with "to-be-backported"
+    # Check each open issues labeled with "st:test-and-merge"
 
     if verbose:
         print(issue)
