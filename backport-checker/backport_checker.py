@@ -9,7 +9,7 @@ import traceback
 from github import Github
 
 
-def check_tbp_issue(issue, repo, bp_issues, verbose):
+def check_tbp_issue(issue, repo, bp_issues, interactive, verbose):
     # Check all closed issues labeled with "to-be-backported"
 
     if verbose:
@@ -29,6 +29,10 @@ def check_tbp_issue(issue, repo, bp_issues, verbose):
             if issue.title.strip() in bp_issue.title.strip():
                 break
         else:
+            if interactive:
+                print('PR #{} (@{}): {}'.format(
+                    issue.number, pr.merged_by.login, issue.title))
+                return
             msg = ('@{} This pull-request is marked as `to-be-backported`, '
                    'but the corresponding backport PR could not be found. '
                    'Could you check?'.format(pr.merged_by.login))
@@ -47,6 +51,7 @@ if __name__ == '__main__':
                         default=os.environ.get('CHAINER_GITHUB_TOKEN', None))
     parser.add_argument('--days', type=int, default=30)
     parser.add_argument('--processes', type=int, default=4)
+    parser.add_argument('--interactive', action='store_true')
     parser.add_argument('--verbose', '-v', action='store_true')
     args = parser.parse_args()
 
@@ -70,7 +75,7 @@ if __name__ == '__main__':
     count = 0
     p = Pool(processes=args.processes)
     for issue in tbp_issues:
-        p.apply_async(check_tbp_issue, (issue, repo, bp_issues, args.verbose))
+        p.apply_async(check_tbp_issue, (issue, repo, bp_issues, args.interactive, args.verbose))
         count += 1
     p.close()
     print('Found {} issues to check...'.format(count))
