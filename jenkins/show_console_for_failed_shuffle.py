@@ -8,7 +8,7 @@ def get(url):
 def show(job):
     matrix = get('https://jenkins.preferred.jp/job/chainer/job/{}/api/xml?xpath=/matrixProject/activeConfiguration[color="red"]/url&wrapper=result'.format(job))
     for m in matrix:
-        print('open "{}lastBuild/consoleFull#footer"'.format(m.text))
+        print('open "{}lastBuild/console#footer"'.format(m.text))
 
 if __name__ == '__main__':
     for repo in ['chainer', 'cupy']:
