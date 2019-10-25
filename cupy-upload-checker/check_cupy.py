@@ -29,8 +29,10 @@ wheel_archs = [
 
 def get_basenames(project, version):
     locator = distlib.locators.PyPIJSONLocator('https://pypi.org/pypi')
-    dist = locator.get_project(project)[version]
-    return [os.path.basename(url) for url in dist.download_urls]
+    proj = locator.get_project(project)
+    if version not in proj:
+        return []
+    return [os.path.basename(url) for url in proj[version].download_urls]
 
 def get_expected_sdist_basename(project, version):
     return '{project}-{version}.tar.gz'.format(
