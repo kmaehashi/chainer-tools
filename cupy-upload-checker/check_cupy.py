@@ -15,9 +15,8 @@ wheel_projects = [
     'cupy-cuda101',
 ]
 
+# for v7
 wheel_archs = [
-    'cp27-cp27mu-manylinux1_x86_64',
-    'cp34-cp34m-manylinux1_x86_64',
     'cp35-cp35m-manylinux1_x86_64',
     'cp36-cp36m-manylinux1_x86_64',
     'cp37-cp37m-manylinux1_x86_64',
@@ -25,6 +24,12 @@ wheel_archs = [
     'cp36-cp36m-win_amd64',
     'cp37-cp37m-win_amd64',
 ]
+
+# for v6
+wheel_archs_legacy = [
+    'cp27-cp27mu-manylinux1_x86_64',
+    'cp34-cp34m-manylinux1_x86_64',
+] + wheel_archs
 
 
 def get_basenames(project, version):
@@ -64,6 +69,7 @@ def verify(project, expected, actual):
 
 def main(argv):
     version = argv[1]
+    legacy = int(version[0]) < 7
 
     # sdist
     project = 'cupy'
@@ -75,7 +81,7 @@ def main(argv):
     for project in wheel_projects:
         expected = [
             get_expected_wheel_basename(project, version, arch)
-            for arch in wheel_archs
+            for arch in (wheel_archs_legacy if legacy else wheel_archs)
         ]
         actual = get_basenames(project, version)
         verify(project, expected, actual)
