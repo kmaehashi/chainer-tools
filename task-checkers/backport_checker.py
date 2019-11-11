@@ -11,6 +11,7 @@ from github import Github
 
 def check_tbp_issue(issue, repo, bp_issues, interactive, verbose):
     # Check each closed issues labeled with "to-be-backported"
+    # bp_issues MUST be desc-sorted by creation date.
 
     if verbose:
         print(issue)
@@ -25,17 +26,27 @@ def check_tbp_issue(issue, repo, bp_issues, interactive, verbose):
             # No check needed for unmerged PRs.
             return
 
+        found_backport = False
         for bp_issue in bp_issues:
-            if issue.title.strip() in bp_issue.title.strip():
+            if bp_issue.created_at < issue.created_at:
+                # As the creation date of backport PR should always be newer
+                # than that of the original PR, terminate iteration.
                 break
-        else:
+            if issue.title.strip() in bp_issue.title.strip():
+                found_backport = True
+                break
+        if not found_backport:
+            mention_to = pr.merged_by.login
+            if mention_to.endswith('[bot]'):
+                mention_to = pr.assignee.login
+
             if interactive:
                 print('PR #{} (@{}): {}'.format(
-                    issue.number, pr.merged_by.login, issue.title))
+                    issue.number, mention_to, issue.title))
                 return
             msg = ('@{} This pull-request is marked as `to-be-backported`, '
                    'but the corresponding backport PR could not be found. '
-                   'Could you check?'.format(pr.merged_by.login))
+                   'Could you check?'.format(mention_to))
             issue.create_comment(msg)
 
     except Exception as e:
@@ -69,7 +80,8 @@ if __name__ == '__main__':
     bp_issues = repo.get_issues(
         labels=[repo.get_label('backport')],
         state='all',
-        sort='updated',
+        sort='created',
+        direction='desc',
     )
 
     count = 0
