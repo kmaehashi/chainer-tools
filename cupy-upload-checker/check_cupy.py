@@ -20,9 +20,11 @@ wheel_archs = [
     'cp35-cp35m-manylinux1_x86_64',
     'cp36-cp36m-manylinux1_x86_64',
     'cp37-cp37m-manylinux1_x86_64',
+    'cp38-cp38-manylinux1_x86_64',
 
     'cp36-cp36m-win_amd64',
     'cp37-cp37m-win_amd64',
+    'cp38-cp38-win_amd64',
 ]
 
 # for v6
