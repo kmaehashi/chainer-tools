@@ -13,6 +13,7 @@ wheel_projects = [
     'cupy-cuda92',
     'cupy-cuda100',
     'cupy-cuda101',
+    'cupy-cuda102',
 ]
 
 # for v7
