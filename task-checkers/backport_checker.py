@@ -38,7 +38,12 @@ def check_tbp_issue(issue, repo, bp_issues, interactive, verbose):
         if not found_backport:
             mention_to = pr.merged_by.login
             if mention_to.endswith('[bot]'):
-                mention_to = pr.assignee.login
+                # Avoid notifying mergify.
+                if pr.assignee is not None:
+                    mention_to = pr.assignee.login
+                else:
+                    # No assignee set to PR, mention to the original author.
+                    mention_to = pr.user.login
 
             if interactive:
                 print('PR #{} (@{}): {}'.format(
