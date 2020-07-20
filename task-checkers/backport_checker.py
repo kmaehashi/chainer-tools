@@ -76,6 +76,8 @@ if __name__ == '__main__':
     repo = org.get_repo(args.repo)
 
     since = datetime.datetime.now() - datetime.timedelta(args.days)
+    print('"to-be-backported" issues updated after {} are '
+          'targetted for notification'.format(since))
     tbp_issues = repo.get_issues(
         labels=[repo.get_label('to-be-backported')],
         state='closed',
