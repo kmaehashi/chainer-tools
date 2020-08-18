@@ -7,6 +7,15 @@ import distlib.locators
 
 
 wheel_projects = [
+    'cupy-cuda90',
+    'cupy-cuda92',
+    'cupy-cuda100',
+    'cupy-cuda101',
+    'cupy-cuda102',
+    'cupy-cuda110',
+]
+
+wheel_projects_legacy = [
     'cupy-cuda80',
     'cupy-cuda90',
     'cupy-cuda91',
@@ -14,9 +23,9 @@ wheel_projects = [
     'cupy-cuda100',
     'cupy-cuda101',
     'cupy-cuda102',
+    'cupy-cuda110',
 ]
 
-# for v7
 wheel_archs = [
     'cp35-cp35m-manylinux1_x86_64',
     'cp36-cp36m-manylinux1_x86_64',
@@ -28,11 +37,8 @@ wheel_archs = [
     'cp38-cp38-win_amd64',
 ]
 
-# for v6
-wheel_archs_legacy = [
-    'cp27-cp27mu-manylinux1_x86_64',
-    'cp34-cp34m-manylinux1_x86_64',
-] + wheel_archs
+
+wheel_archs_legacy = wheel_archs
 
 
 def get_basenames(project, version):
@@ -72,7 +78,7 @@ def verify(project, expected, actual):
 
 def main(argv):
     version = argv[1]
-    legacy = int(version[0]) < 7
+    legacy = int(version[0]) < 8
 
     # sdist
     project = 'cupy'
@@ -81,7 +87,7 @@ def main(argv):
     verify(project, expected, actual)
 
     # wheel
-    for project in wheel_projects:
+    for project in (wheel_projects_legacy if legacy else wheel_projects):
         expected = [
             get_expected_wheel_basename(project, version, arch)
             for arch in (wheel_archs_legacy if legacy else wheel_archs)
