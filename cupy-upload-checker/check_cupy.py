@@ -13,17 +13,17 @@ wheel_projects = [
     'cupy-cuda101',
     'cupy-cuda102',
     'cupy-cuda110',
+    'cupy-cuda111',
 ]
 
 wheel_projects_legacy = [
-    'cupy-cuda80',
     'cupy-cuda90',
-    'cupy-cuda91',
     'cupy-cuda92',
     'cupy-cuda100',
     'cupy-cuda101',
     'cupy-cuda102',
     'cupy-cuda110',
+    'cupy-cuda111',
 ]
 
 wheel_archs = [
@@ -78,7 +78,7 @@ def verify(project, expected, actual):
 
 def main(argv):
     version = argv[1]
-    legacy = int(version[0]) < 8
+    legacy = int(version[0]) < 9
 
     # sdist
     project = 'cupy'
