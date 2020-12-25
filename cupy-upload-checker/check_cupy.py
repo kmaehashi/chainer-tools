@@ -7,7 +7,6 @@ import distlib.locators
 
 
 wheel_projects = [
-    'cupy-cuda90',
     'cupy-cuda92',
     'cupy-cuda100',
     'cupy-cuda101',
@@ -27,6 +26,16 @@ wheel_projects_legacy = [
 ]
 
 wheel_archs = [
+    'cp36-cp36m-manylinux1_x86_64',
+    'cp37-cp37m-manylinux1_x86_64',
+    'cp38-cp38-manylinux1_x86_64',
+
+    'cp36-cp36m-win_amd64',
+    'cp37-cp37m-win_amd64',
+    'cp38-cp38-win_amd64',
+]
+
+wheel_archs_legacy = [
     'cp35-cp35m-manylinux1_x86_64',
     'cp36-cp36m-manylinux1_x86_64',
     'cp37-cp37m-manylinux1_x86_64',
@@ -38,7 +47,6 @@ wheel_archs = [
 ]
 
 
-wheel_archs_legacy = wheel_archs
 
 
 def get_basenames(project, version):
