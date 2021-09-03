@@ -16,11 +16,13 @@ def find_milestone(repo, milestone):
     for ms in repo.get_milestones(state='all'):
         if milestone.strip() == ms.title.strip():
             return ms
-    raise RuntimeError('milestone is not found: {}'.format(milestone))
 
 
 def get_issues(milestone, repo):
     milestone = find_milestone(repo, milestone)
+    if milestone is None:
+        log('*** WARNING! Milestone could not be found: {}'.format(milestone))
+        return []
     issues = repo.get_issues(milestone=milestone, state='closed')
     return issues
 
@@ -43,12 +45,15 @@ if __name__ == '__main__':
         log(f'Processing milestone: {m}')
         issues = get_issues(m, repo)
         for issue in issues:
-            assignee = issue.assignee.login if issue.assignee else '(not set)'
-            print(','.join([str(issue.number), issue.user.login, assignee]))
+            if issue.assignee is None:
+                log(f'Assignee not set: {issue.html_url}')
+            else:
+                assignee = issue.assignee.login
+            print('\t'.join([str(issue.number), issue.user.login, assignee]))
             authors[issue.user.login] += 1
             assignees[assignee] += 1
 
     print('--------')
-    print('ID,Authored,Assigned')
+    print('ID\tAuthored\tAssigned')
     for user in sorted(set(authors.keys()) | set(assignees.keys())):
-        print(','.join([user, str(authors[user]), str(assignees[user])]))
+        print('\t'.join([user, str(authors[user]), str(assignees[user])]))
